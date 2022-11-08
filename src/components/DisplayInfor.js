@@ -1,4 +1,5 @@
 import React from "react";
+import './DisplayInfor.scss';
 class DisplayInfor extends React.Component {
     state = {
         isShowListUser: true
