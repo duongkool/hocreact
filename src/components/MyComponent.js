@@ -7,24 +7,39 @@ class MyComponent extends React.Component {
             { id: 1, name: "Trần Văn A", age: "18" },
             { id: 2, name: "Trần Văn B", age: "45" },
             { id: 3, name: "Trần Văn C", age: "37" }
-        ]
+        ],
     }
     handleAddNewUser = (userObj) => {
         this.setState({
             listUsers: [userObj, ...this.state.listUsers]
         })
     }
+    handleDeleteUser = (userId) => {
+        let listUsersClone = [...this.state.listUsers];
+        listUsersClone = listUsersClone.filter(item => item.id !== userId);
+        this.setState({
+            listUsers: listUsersClone
+        })
+    }
+
     // JSX
     render() {
         return (
-            <div>
-                <AddUserInfor
-                    handleAddNewUser={this.handleAddNewUser} />
+            <>
+                <div className="a">
+                    <AddUserInfor
+                        handleAddNewUser={this.handleAddNewUser} />
+                </div>
                 <br />
-                <DisplayInfor
-                    // truyền props
-                    listUsers={this.state.listUsers} />
-            </div>
+                <div className="b">
+                    <DisplayInfor
+                        // truyền props
+                        listUsers={this.state.listUsers}
+                        handleDeleteUser={this.handleDeleteUser}
+
+                    />
+                </div>
+            </>
         );
     }
 }
