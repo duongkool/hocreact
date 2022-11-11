@@ -56,7 +56,7 @@ const MyComponent = (props) => {
             { id: 1, name: "Trần Văn A", age: "18" },
             { id: 2, name: "Trần Văn B", age: "45" },
             { id: 3, name: "Trần Văn C", age: "37" }
-        ],
+        ]
     )
 
     const handleAddNewUser = (userObj) => {
@@ -79,8 +79,7 @@ const MyComponent = (props) => {
                 <DisplayInfor
                     // truyền props
                     listUsers={listUsers}
-                    handleDeleteUser={handleDeleteUser}                        // handleDeleteUser={this.handleDeleteUser}
-
+                    handleDeleteUser={handleDeleteUser}
                 />
             </div>
         </>
