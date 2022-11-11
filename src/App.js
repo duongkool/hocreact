@@ -1,9 +1,9 @@
-
 import './App.scss';
+import Header from './components/header/header';
 const App = () => {
   return (
     <div className="app container">
-      hello world
+      <Header />
     </div>
   );
 }
