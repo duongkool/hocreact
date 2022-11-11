@@ -22,7 +22,7 @@ const Header = () => {
                 Log out
               </NavDropdown.Item>
               <NavDropdown.Item href="#action/3.3">profile</NavDropdown.Item>
-              <NavDropdown.Divider />
+              {/* <NavDropdown.Divider /> */}
             </NavDropdown>
             </Nav>
         </Navbar.Collapse>

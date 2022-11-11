@@ -4,6 +4,13 @@ const App = () => {
   return (
     <div className="app container">
       <Header />
+      <div>
+        test link
+        <div>
+          <button>to user page</button>
+          <button>to admin page</button>
+        </div>
+      </div>
     </div>
   );
 }
