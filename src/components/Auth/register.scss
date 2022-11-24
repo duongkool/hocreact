@@ -1,0 +1,65 @@
+.register-container {
+    display: flex;
+
+    .left-main {
+        color: white;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        background-color: #131313;
+        justify-content: center;
+        align-items: center;
+        gap: 28px;
+        width: 50%;
+
+        .title-main {
+            text-align: center;
+            font-weight: 400;
+        }
+
+        img {
+            width: 50%;
+            height: 40%;
+        }
+    }
+
+    .right-main {
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+        height: 100vh;
+        background-color: white;
+        position: absolute;
+        right: 0;
+        width: 52%;
+
+        .login-container {
+            .register-container {
+                .content-form {
+                    .form-password {
+
+
+                        .showhide-password {}
+                    }
+                }
+
+            }
+
+        }
+
+
+    }
+}
+
+.form-group.form-password {
+    position: relative;
+}
+
+span.showhide-password {
+    position: absolute !important;
+    right: 10px;
+    bottom: 10px;
+}
+
+.btn-create-account {
+    margin-top: 15px;
+}

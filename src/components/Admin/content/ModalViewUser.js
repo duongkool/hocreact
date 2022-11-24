@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import './ManageUser.scss'
 import { FcPlus } from "react-icons/fc";
-import { toast } from 'react-toastify';
-import { postCreateNewUser } from '../../../Services/apisServices'
+import _ from 'lodash';
 
-const ModalCreateUser = (props) => {
+
+
+const ModalViewUser = (props) => {
     // const [show, setShow] = useState(false);
-    const { show, setShow } = props;
+    const { show, setShow, dataView } = props;
     const handleClose = () => {
         setShow(false)
         setEmail("");
@@ -17,14 +18,15 @@ const ModalCreateUser = (props) => {
         setRole("USER");
         setImage("");
         setPreviewImage("");
+        props.resetViewData()
     };
-    const validateEmail = (email) => {
-        return String(email)
-            .toLowerCase()
-            .match(
-                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            );
-    };
+    // const validateEmail = (email) => {
+    //     return String(email)
+    //         .toLowerCase()
+    //         .match(
+    //             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    //         );
+    // };
     // const handleShow = () => setShow(true);
 
     const [email, setEmail] = useState("");
@@ -33,42 +35,52 @@ const ModalCreateUser = (props) => {
     const [role, setRole] = useState("USER");
     const [image, setImage] = useState("");
     const [previewImage, setPreviewImage] = useState('')
-    const handleUloadImage = (event) => {
-        if (event.target && event.target.files && event.target.files[0]) {
-            setPreviewImage(URL.createObjectURL(event.target.files[0]));
-            setImage(event.target.files[0])
-        } else {
 
+    useEffect(() => {
+        if (!_.isEmpty(dataView)) {
+            setEmail(dataView.email);
+            setUserName(dataView.username);
+            setRole(dataView.role);
+            setImage("");
+            if (dataView.image) {
+                setPreviewImage(`data:image/jpeg;base64,${dataView.image}`);
+            }
         }
-    }
-    const handleSubmitCreateUser = async () => {
-        const isValidEmail = validateEmail(email);
-        if (!isValidEmail) {
-            toast.error('invalid email')
-            return;
-        }
-        if (!password) {
-            toast.error('invalid password')
-            return;
-        }
+    }, [dataView])
+    // const handleUloadImage = (event) => {
+    //     if (event.target && event.target.files && event.target.files[0]) {
+    //         setPreviewImage(URL.createObjectURL(event.target.files[0]));
+    //         setImage(event.target.files[0])
+    //     } else {
 
-        // validate
+    //     }
+    // }
+    // const handleSubmitCreateUser = async () => {
+    //     const isValidEmail = validateEmail(email);
+    //     if (!isValidEmail) {
+    //         toast.error('invalid email')
+    //         return;
+    //     }
+    //     if (!password) {
+    //         toast.error('invalid password')
+    //         return;
+    //     }
+
+    //     // validate
 
 
 
-        let data = await postCreateNewUser(email, password, username, role, image);
-        if (data && data.EC === 0) {
-            toast.success(data.EM);
-            handleClose();
-            // await props.fetchListUser()
-            props.setCurrentPage(1);
-            await props.fetchListUserWithPaginate(1)
-        }
-        if (data && data.EC !== 0) {
-            toast.error(data.EM)
-        }
+    //     let data = await postCreateNewUser(email, password, username, role, image);
+    //     if (data && data.EC === 0) {
+    //         toast.success(data.EM);
+    //         handleClose();
+    //         await props.fetchListUser()
+    //     }
+    //     if (data && data.EC !== 0) {
+    //         toast.error(data.EM)
+    //     }
 
-    }
+    // }
 
     return (
         <>
@@ -83,7 +95,7 @@ const ModalCreateUser = (props) => {
                 onHide={handleClose}
                 size={'xl'}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Add New User</Modal.Title>
+                    <Modal.Title>View User</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <form className="row g-3">
@@ -93,6 +105,7 @@ const ModalCreateUser = (props) => {
                                 type="email"
                                 className="form-control"
                                 value={email}
+                                disabled
                                 onChange={(event) => setEmail(event.target.value)}
                             />
                         </div>
@@ -102,6 +115,7 @@ const ModalCreateUser = (props) => {
                                 type="password"
                                 className="form-control"
                                 value={password}
+                                disabled
                                 onChange={(event) => setPassWord(event.target.value)}
                             />
                         </div>
@@ -111,12 +125,17 @@ const ModalCreateUser = (props) => {
                                 type="text"
                                 className="form-control"
                                 value={username}
+                                disabled
                                 onChange={(event) => setUserName(event.target.value)}
                             />
                         </div>
                         <div className="col-md-4">
                             <label className="form-label">Role</label>
-                            <select className="form-select" value={role} onChange={(event) => setRole(event.target.value)}>
+                            <select className="form-select"
+                                value={role}
+                                onChange={(event) => setRole(event.target.value)}
+                                disabled
+                            >
                                 <option value={"USER"}>USER</option>
                                 <option value={"ADMIN"}>ADMIN</option>
                             </select>
@@ -127,7 +146,10 @@ const ModalCreateUser = (props) => {
                                 id='lableUpload'
                                 type={"file"}
                                 hidden
-                                onChange={(event) => handleUloadImage(event)} />
+                                disabled
+
+                            // onChange={(event) => handleUloadImage(event)}
+                            />
                         </div>
                         <div className='col-md-12 img-preview'>
                             {previewImage ? <img src={previewImage} /> : <span>preview image</span>}
@@ -139,12 +161,12 @@ const ModalCreateUser = (props) => {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={() => handleSubmitCreateUser()}>
+                    {/* <Button variant="primary" onClick={() => handleSubmitCreateUser()}>
                         Save
-                    </Button>
+                    </Button> */}
                 </Modal.Footer>
             </Modal>
         </>
     );
 }
-export default ModalCreateUser;
+export default ModalViewUser;
